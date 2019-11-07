@@ -1,0 +1,33 @@
+#include "Enes100.h"
+#include "Tank.h"
+#include "math.h"
+
+
+
+void setup() {
+	Enes100.begin("The Professionals", DATA, 2, 1, 2);
+}
+
+void loop() {
+	Tank.begin();
+	Enes100.updateLocation();
+	float thetaTank = Enes100.location.theta;
+	float thetaTankdegrees = thetaTank*57.29583;
+	float Tankx=Enes100.location.x;
+	float Tanky= Enes100.location.y;
+	Enes100.println(thetaTankdegrees);
+	Enes100.println(Tankx);
+	Enes100.println(Tanky);
+		if (-105 >thetaTankdegrees> -180 || 180> thetaTankdegrees> -75 ){
+		Enes100.updateLocation();
+		thetaTank = Enes100.location.theta;
+		thetaTankdegrees = thetaTank*57.29583;
+		Tank.setLeftMotorPWM(-255);
+		Tank.setRightMotorPWM(255);
+	}
+//	if (-85>thetaTankdegrees>-95){
+//			Tank.turnOffMotors();
+//	}
+
+	//0.35, 0.35
+}
