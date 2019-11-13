@@ -69,7 +69,7 @@ void loop() {
    * meaning we may read a completely different thing.
    * 
    * There will have to be something that checks to make sure we are reading at the
-   * beginning of the signal, and if not rearranged read data to be in correct order.
+   * beginning of the signal, and if not rearrange the read data to be in correct order.
    * 
    * The data will be transmitted with a 9 bit "activation signal" at the very start
    * "000000001"
