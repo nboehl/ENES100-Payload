@@ -43,7 +43,7 @@ while (Enes100.location.y < 1.6) {
 			Enes100.println(Enes100.location.theta);
 			delay(0.0001);
 		}
-    while(Tank.readDistanceSensor(2) > 0.15 or Tank.readDistanceSensor(0) > 0.15){
+    while(Tank.readDistanceSensor(2) > 0.15 and Tank.readDistanceSensor(0) > 0.15){
       Tank.turnOffMotors();
 	  Tank.setLeftMotorPWM(255);
 	  Tank.setRightMotorPWM(255);
@@ -75,7 +75,7 @@ while (Enes100.location.y < 1.6) {
 	Enes100.println(Enes100.location.theta);
 	delay(0.0001);
     }
-	if(Tank.readDistanceSensor(2) > 0.99 or Tank.readDistanceSensor(0) > 0.99){
+	if(Tank.readDistanceSensor(2) > (0.99 + 0.50) and Tank.readDistanceSensor(0) > (0.99 + 0.50)){
 	  while(Enes100.location.x < 3.0){
         Tank.turnOffMotors();
 	    Tank.setLeftMotorPWM(255);
@@ -85,14 +85,14 @@ while (Enes100.location.y < 1.6) {
       }
 	}
 	else{	
-      while(Tank.readDistanceSensor(2) > 0.12 or Tank.readDistanceSensor(0) > 0.12){
+      while(Tank.readDistanceSensor(2) > 0.12 and Tank.readDistanceSensor(0) > 0.12){
         Tank.turnOffMotors();
         Tank.setLeftMotorPWM(255);
         Tank.setRightMotorPWM(255);
         Enes100.updateLocation();
         delay(0.0001);
       }
-     while (fabs(Enes100.location.theta - 1.57) > 0.05) {
+     while (fabs(Enes100.location.theta - 1.5707) > 0.0500) {
 	   Tank.setLeftMotorPWM(-255);
 	   Tank.setRightMotorPWM(255);
 	   Enes100.updateLocation();
