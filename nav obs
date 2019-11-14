@@ -43,7 +43,7 @@ while (Enes100.location.y < 1.6) {
 			Enes100.println(Enes100.location.theta);
 			delay(0.0001);
 		}
-    while(Tank.readDistanceSensor(2) > 0.15){
+    while(Tank.readDistanceSensor(2) > 0.15 or Tank.readDistanceSensor(0) > 0.15){
       Tank.turnOffMotors();
 	  Tank.setLeftMotorPWM(255);
 	  Tank.setRightMotorPWM(255);
@@ -75,7 +75,7 @@ while (Enes100.location.y < 1.6) {
 	Enes100.println(Enes100.location.theta);
 	delay(0.0001);
     }
-    while(Tank.readDistanceSensor(2) > 0.15){
+    while(Tank.readDistanceSensor(2) > 0.15 or Tank.readDistanceSensor(0) > 0.15){
       Tank.turnOffMotors();
       Tank.setLeftMotorPWM(255);
       Tank.setRightMotorPWM(255);
@@ -115,7 +115,15 @@ while (Enes100.location.y < 1.6) {
 	delay(0.0001);
     }
   } 
-if(Enes100.location.x < 2.9){
+if(Enes100.location.x > 3.0){
+	Enes100.updateLocation();
+	//when looping does not run if tank is already at destination
+	float tankTheta = Enes100.location.theta;
+	double diffOfX = Enes100.destination.x - Enes100.location.x;
+	double diffOfY = Enes100.destination.y - Enes100.location.y;
+	float targetTheta = atanf(diffOfY/diffOfX); //find theta tank must face 
+	Enes100.println(targetTheta);
+	//tank rotates until it is extremely close to optimal angle, exact value hard to find
   while (fabs(Enes100.location.theta - targetTheta) > 0.05) {
 			Tank.setLeftMotorPWM(-255);
 			Tank.setRightMotorPWM(255);
@@ -123,14 +131,27 @@ if(Enes100.location.x < 2.9){
 			Enes100.print("theta :");
 			Enes100.println(Enes100.location.theta);
 			delay(0.0001);
-		}
-		//tank begins to move forward towards destination
-		Tank.turnOffMotors();
-		Tank.setLeftMotorPWM(255);
-		Tank.setRightMotorPWM(255);
-		//stop 250mm before destination
-		if (Enes100.location.x < (Enes100.destination.x - 0.25)){
-			Tank.turnOffMotors();
-	  }
 	}
+		//tank begins to move forward towards destination
+   while(fabs(Enes100.location.x - Enes100.destination.x) > 0.25){
+        Tank.turnOffMotors();
+        Tank.setLeftMotorPWM(255);
+	Tank.setRightMotorPWM(255);
+	Enes100.updateLocation();
+	delay(0.0001);
+    }
+     while(fabs(Enes100.location.y - Enes100.destination.y) > 0.25){
+        Tank.turnOffMotors();
+        Tank.setLeftMotorPWM(255);
+	Tank.setRightMotorPWM(255);
+	Enes100.updateLocation();
+	delay(0.0001);
+    }
+   }
+		
+	Tank.turnOffMotors();
+	  delay(1000);
+	
 }
+
+
