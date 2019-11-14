@@ -18,7 +18,7 @@ void loop() {
 	float targetTheta = atanf(diffOfY/diffOfX); //find theta tank must face 
 	Enes100.println(targetTheta);
 	//tank rotates until it is extremely close to optimal angle, exact value hard to find
-  
+if (Enes100.location.x < (Enes100.destination.x - 0.25)){  
   while (1.57 - Enes100.location.theta > 0.05) {
 			Tank.setLeftMotorPWM(-255);
 			Tank.setRightMotorPWM(255);
@@ -161,7 +161,7 @@ if(Enes100.location.x > 3.0){
 	delay(0.0001);
     }
    }
-		
+}		
 	Tank.turnOffMotors();
 	  delay(1000);
 	
