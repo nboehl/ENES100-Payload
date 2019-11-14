@@ -1,0 +1,76 @@
+#include "Enes100.h"
+#include "Tank.h"
+#include "math.h"
+
+
+
+void setup() {
+	Enes100.begin("The Professionals", DATA, 2, 1, 2);
+}
+
+void loop() {
+	Tank.begin();
+	Enes100.updateLocation();
+	float thetaTank = Enes100.location.theta;
+	float thetaTankdegrees = thetaTank*57.29583;
+	float Tankx=Enes100.location.x;
+	float Tanky= Enes100.location.y;
+	double diffOfX = Enes100.destination.x - Enes100.location.x;
+	double diffOfY = Enes100.destination.y - Enes100.location.y;
+	float targetTheta = atanf(diffOfY/diffOfX); //find theta tank must face 
+	Enes100.println(thetaTankdegrees);
+	Enes100.println(Tankx);
+	Enes100.println(Tanky);
+	
+	if (Tankx<0.5){
+		
+		if (Tanky<1.55){
+						if (thetaTankdegrees<90){
+							Enes100.updateLocation();
+							Tank.setLeftMotorPWM(-255);
+							Tank.setRightMotorPWM(255);
+							}
+						else{
+							Enes100.updateLocation();
+							Tank.turnOffMotors();
+							Tank.setLeftMotorPWM(255);
+							Tank.setRightMotorPWM(255);	
+							}	
+						}
+		else{
+						if (fabs(Enes100.location.theta - targetTheta) > 0.1) {
+			Tank.setLeftMotorPWM(255);
+			Tank.setRightMotorPWM(-255);
+			Enes100.updateLocation();
+			Enes100.print("theta :");
+			Enes100.println(Enes100.location.theta);
+			delay(0.0001);}
+						else {
+							Tank.turnOffMotors();
+							Tank.setLeftMotorPWM(255);
+							Tank.setRightMotorPWM(255);
+							}
+			}
+	
+				}
+	else {
+			Tank.setLeftMotorPWM(255);
+			Tank.setRightMotorPWM(255);
+	}
+	
+	
+		if (Tankx>Enes100.destination.x-0.35){	
+			while(fabs(Enes100.location.theta - targetTheta) > 0.1) {
+			Tank.setLeftMotorPWM(255);
+			Tank.setRightMotorPWM(-255);
+			Enes100.updateLocation();
+			Enes100.print("theta :");
+			Enes100.println(Enes100.location.theta);
+			delay(0.00001);}
+			if (Tankx>Enes100.destination.x-0.25){
+Tank.turnOffMotors();
+			}
+			if (Tanky>Enes100.destination.y-0.25){
+Tank.turnOffMotors();}
+		}
+}
