@@ -19,7 +19,7 @@ void loop() {
 	Enes100.println(targetTheta);
 	//tank rotates until it is extremely close to optimal angle, exact value hard to find
   
-  while (1.57 - Enes100.location.theta) > 0.05) {
+  while (1.57 - Enes100.location.theta > 0.05) {
 			Tank.setLeftMotorPWM(-255);
 			Tank.setRightMotorPWM(255);
 			Enes100.updateLocation();
@@ -27,11 +27,15 @@ void loop() {
 			Enes100.println(Enes100.location.theta);
 			delay(0.0001);
 		}
-  Tank.turnOffMotors();
+while (Enes100.location.y < 1.6) {
+ 	Tank.turnOffMotors();
 	Tank.setLeftMotorPWM(255);
-	Tank.setRightMotorPWM(255);   
-  if(Enes.location.y > 1.6){
-   while (Enes100.location.theta + 0.1) > 0.05) {
+	Tank.setRightMotorPWM(255); 
+	Enes100.updateLocation();
+	delay(0.0001);
+}	   
+  if(Enes100.location.y > 1.6){
+   while (fabs(Enes100.location.theta) > 0.05) {
 			Tank.setLeftMotorPWM(-255);
 			Tank.setRightMotorPWM(255);
 			Enes100.updateLocation();
@@ -39,51 +43,63 @@ void loop() {
 			Enes100.println(Enes100.location.theta);
 			delay(0.0001);
 		}
-    while(Tank.readDistanceSensor(2) > 0.1){
+    while(Tank.readDistanceSensor(2) > 0.15){
       Tank.turnOffMotors();
-	    Tank.setLeftMotorPWM(255);
-	    Tank.setRightMotorPWM(255);
+	  Tank.setLeftMotorPWM(255);
+	  Tank.setRightMotorPWM(255);
+	  Enes100.updateLocation();
+	  delay(0.0001);
     }
-     while (1.57 + Enes100.location.theta) > 0.05) {
-			Tank.setLeftMotorPWM(-255);
-			Tank.setRightMotorPWM(255);
-			Enes100.updateLocation();
-			Enes100.print("theta :");
-			Enes100.println(Enes100.location.theta);
-			delay(0.0001);
-		}
+     while (fabs(Enes100.location.theta + 1.57) > 0.05) {
+	Tank.setLeftMotorPWM(-255);
+	Tank.setRightMotorPWM(255);
+	Enes100.updateLocation();
+	Enes100.print("theta :");
+	Enes100.println(Enes100.location.theta);
+	delay(0.0001);
+     }
   }
-      Tank.turnOffMotors();
-	    Tank.setLeftMotorPWM(255);
-	    Tank.setRightMotorPWM(255);
-  if(Enes.location.y < 1.0){
-   while (Enes100.location.theta + 0.1) > 0.05) {
-			Tank.setLeftMotorPWM(-255);
-			Tank.setRightMotorPWM(255);
-			Enes100.updateLocation();
-			Enes100.print("theta :");
-			Enes100.println(Enes100.location.theta);
-			delay(0.0001);
-		}
-    while(Tank.readDistanceSensor(2) > 0.1){
-      Tank.turnOffMotors();
-	    Tank.setLeftMotorPWM(255);
-	    Tank.setRightMotorPWM(255);
-    }
-     while (1.57 - Enes100.location.theta) > 0.05) {
-			Tank.setLeftMotorPWM(-255);
-			Tank.setRightMotorPWM(255);
-			Enes100.updateLocation();
-			Enes100.print("theta :");
-			Enes100.println(Enes100.location.theta);
-			delay(0.0001);
-		}
-  } 
-  Tank.turnOffMotors();
+ while (Enes100.location.y > 1.0) {
+ 	Tank.turnOffMotors();
 	Tank.setLeftMotorPWM(255);
 	Tank.setRightMotorPWM(255);
-  if(Enes.location.y < 1.7){
-   while (Enes100.location.theta + 0.1) > 0.05) {
+	Enes100.updateLocation();
+	delay(0.0001);
+ }	
+  if(Enes100.location.y < 1.0){
+   while (fabs(Enes100.location.theta) > 0.05) {
+	Tank.setLeftMotorPWM(-255);
+	Tank.setRightMotorPWM(255);
+	Enes100.updateLocation();
+	Enes100.print("theta :");
+	Enes100.println(Enes100.location.theta);
+	delay(0.0001);
+    }
+    while(Tank.readDistanceSensor(2) > 0.15){
+      Tank.turnOffMotors();
+      Tank.setLeftMotorPWM(255);
+      Tank.setRightMotorPWM(255);
+      Enes100.updateLocation();
+      delay(0.0001);
+    }
+     while (fabs(Enes100.location.theta - 1.57) > 0.05) {
+	Tank.setLeftMotorPWM(-255);
+	Tank.setRightMotorPWM(255);
+	Enes100.updateLocation();
+	Enes100.print("theta :");
+	Enes100.println(Enes100.location.theta);
+	delay(0.0001);
+     }
+  } 
+  while (Enes100.location.y < 1.7) {
+ 	Tank.turnOffMotors();
+	Tank.setLeftMotorPWM(255);
+	Tank.setRightMotorPWM(255);
+	Enes100.updateLocation();
+	delay(0.0001);
+ }	
+  if(Enes100.location.y > 1.7){
+   while (fabs(Enes100.location.theta) > 0.05) {
 			Tank.setLeftMotorPWM(-255);
 			Tank.setRightMotorPWM(255);
 			Enes100.updateLocation();
@@ -95,6 +111,8 @@ void loop() {
       Tank.turnOffMotors();
 	    Tank.setLeftMotorPWM(255);
 	    Tank.setRightMotorPWM(255);
+		Enes100.updateLocation();
+	delay(0.0001);
     }
   } 
 	else {
