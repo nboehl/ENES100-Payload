@@ -133,216 +133,66 @@ uint8_t i;
 
 if (Enes100.location.x < (Enes100.destination.x - 0.25)){  
   while (1.57 - Enes100.location.theta > 0.05) {
+  turnLeft();    
+  }
 
-    
-    motor1->run(BACKWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-   } // Tank.setLeftMotorPWM(-255);
-     motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor2->setSpeed(i);
-  } //Tank.setRightMotorPWM(255);
-
-      
-      Enes100.updateLocation();
-      Enes100.print("theta :");
-      Enes100.println(Enes100.location.theta);
-      delay(0.0001);
-    }
-
-while (Enes100.location.y < 1.6) {
-
- motor1->run(RELEASE);
- motor2->run(RELEASE);// Tank.turnOffMotors();
- motor1->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-   }// Tank.setLeftMotorPWM(255);
-   motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor2->setSpeed(i);
-  }//Tank.setRightMotorPWM(255); 
-
-  
-  Enes100.updateLocation();
-  delay(0.0001);
-}    
+  while (Enes100.location.y < 1.6) {
+  goStraight();
+  }    
   
   if(Enes100.location.y > 1.6){
    while (fabs(Enes100.location.theta) > 0.05) {
-    motor1->run(BACKWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-   } // Tank.setLeftMotorPWM(-255);
-     motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor2->setSpeed(i);
-  }//  Tank.setRightMotorPWM(255);
-      Enes100.updateLocation();
-      Enes100.print("theta :");
-      Enes100.println(Enes100.location.theta);
-      delay(0.0001);
-    }
+   turnLeft();
+   }
  
- while(distanceRight > 15 and distanceLeft > 15){
-    motor1->run(RELEASE);
-    motor2->run(RELEASE); // Tank.turnOffMotors();
-    motor1->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-  }// Tank.setLeftMotorPWM(255);
-   motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor2->setSpeed(i);
-  } // Tank.setRightMotorPWM(255);
-    Enes100.updateLocation();
-    delay(0.0001);
- }
+   while(distanceRight > 15 and distanceLeft > 15){
+   goStraight();
+   }
  
  while (fabs(Enes100.location.theta + 1.57) > 0.05) {
-  motor1->run(BACKWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-  }// Tank.setLeftMotorPWM(-255);
-  motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor2->setSpeed(i);
-  } //Tank.setRightMotorPWM(255);
-  Enes100.updateLocation();
-  Enes100.print("theta :");
-  Enes100.println(Enes100.location.theta);
-  delay(0.0001);
- }
+   turnRight();
   }
+}
  
- while (Enes100.location.y > 1.0) {
-  motor1->run(RELEASE);
-  motor2->run(RELEASE);// Tank.turnOffMotors();
-  motor1->run(FORWARD);
-    for (i=0; i<255; i++) {
-      motor1->setSpeed(i);
-    }// Tank.setLeftMotorPWM(255);
-  motor2->run(FORWARD);
-    for (i=0; i<255; i++) {
-      motor1->setSpeed(i);
-    }// Tank.setRightMotorPWM(255);
-  Enes100.updateLocation();
-  delay(0.0001);
- }  
+while (Enes100.location.y > 1.0) {
+  goStraight();
+}  
   
   if(Enes100.location.y < 1.0){
    while (fabs(Enes100.location.theta) > 0.05) {
-    motor1->run(BACKWARD);
-    for (i=0; i<255; i++) {
-      motor1->setSpeed(i);
-    }// Tank.setLeftMotorPWM(-255);
-    motor2->run(FORWARD);
-      for (i=0; i<255; i++) {
-        motor1->setSpeed(i);
-      
-      }// Tank.setRightMotorPWM(255);
-  Enes100.updateLocation();
-  Enes100.print("theta :");
-  Enes100.println(Enes100.location.theta);
-  delay(0.0001);
+  turnLeft();
+}
     }
   
   if(distanceRight > (99 + 50) and distanceLeft > (99 + 50)){
     while(Enes100.location.x < 3.0){
-    motor1->run(RELEASE);
-    motor2->run(RELEASE);//  Tank.turnOffMotors();
-    motor1->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-   }//  Tank.setLeftMotorPWM(255);
-    motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor2->setSpeed(i);
-  } //  Tank.setRightMotorPWM(255);
-    Enes100.updateLocation();
-      delay(0.0001);
+    goStraight();
       }
   }
   
   else{ 
    while(distanceRight > 12 and distanceLeft > 12){
-    motor1->run(RELEASE);
-    motor2->run(RELEASE); // Tank.turnOffMotors();
-      motor1->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-   }//  Tank.setLeftMotorPWM(255);
-      motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor2->setSpeed(i);
-  } //  Tank.setRightMotorPWM(255);
-        Enes100.updateLocation();
-        delay(0.0001);
+    goStraight():
       }
      
   while (fabs(Enes100.location.theta - 1.5707) > 0.0500) {
-   motor1->run(BACKWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-   }//  Tank.setLeftMotorPWM(-255);
-   motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-  } //  Tank.setRightMotorPWM(255);
-     Enes100.updateLocation();
-     Enes100.print("theta :");
-     Enes100.println(Enes100.location.theta);
-     delay(0.0001);
+   turnLeft();
      }
   }
   } 
 
 if(Enes100.location.x < 3.0){ 
   while (Enes100.location.y < 1.7) {
-  motor1->run(RELEASE);
-  motor2->run(RELEASE);//Tank.turnOffMotors();
-  motor1->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-   }//Tank.setLeftMotorPWM(255);
-   motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-  }//Tank.setRightMotorPWM(255);
-  Enes100.updateLocation();
-  delay(0.0001);
+  goStraight();
  }  
 } 
   
   if(Enes100.location.y > 1.7){
    while (fabs(Enes100.location.theta) > 0.05) {
-    motor1->run(BACKWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-   }  //Tank.setLeftMotorPWM(-255);
-      motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-  }// Tank.setRightMotorPWM(255);
-      Enes100.updateLocation();
-      Enes100.print("theta :");
-      Enes100.println(Enes100.location.theta);
-      delay(0.0001);
+   turnRight();
     }
     while(Enes100.location.x < 3.0){
-   motor1->run(RELEASE);
-   motor2->run(RELEASE); //  Tank.turnOffMotors();
-    motor1->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-   }//  Tank.setLeftMotorPWM(255);
-  motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-  } //    Tank.setRightMotorPWM(255);
-    Enes100.updateLocation();
-  delay(0.0001);
+   goStraight();
     }
   } 
 
@@ -356,47 +206,14 @@ if(Enes100.location.x > 3.0){
   Enes100.println(targetTheta);
   //tank rotates until it is extremely close to optimal angle, exact value hard to find
   while (fabs(Enes100.location.theta - targetTheta) > 0.05) {
-     motor1->run(BACKWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-   }// Tank.setLeftMotorPWM(-255);
-      motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-  }// Tank.setRightMotorPWM(255);
-      Enes100.updateLocation();
-      Enes100.print("theta :");
-      Enes100.println(Enes100.location.theta);
-      delay(0.0001);
+     turnLeft();
   }
     //tank begins to move forward towards destination
    while(fabs(Enes100.location.x - Enes100.destination.x) > 0.25){
-    motor1->run(RELEASE);
-    motor2->run(RELEASE);//   Tank.turnOffMotors();
-      motor1->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-   }//  Tank.setLeftMotorPWM(255);
-   motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-  }//Tank.setRightMotorPWM(255);
-  Enes100.updateLocation();
-  delay(0.0001);
+   goStraight();
     }
      while(fabs(Enes100.location.y - Enes100.destination.y) > 0.25){
-    motor1->run(RELEASE);
-    motor2->run(RELEASE);//Tank.turnOffMotors();
-       motor1->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-   }// Tank.setLeftMotorPWM(255);
-  motor2->run(FORWARD);
-  for (i=0; i<255; i++) {
-    motor1->setSpeed(i);
-  } //Tank.setRightMotorPWM(255);
-  Enes100.updateLocation();
-  delay(0.0001);
+    goStraight();
     }
    }
 }   
