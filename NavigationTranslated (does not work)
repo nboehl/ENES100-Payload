@@ -405,3 +405,58 @@ if(Enes100.location.x > 3.0){
     delay(1000);
   
 }
+
+
+
+
+// Functions:
+void turnLeft(){
+ motor1->run(BACKWARD);
+ for (i=0; i<255; i++) {
+   motor1->setSpeed(i);
+ } // Tank.setLeftMotorPWM(-255);
+ motor2->run(FORWARD);
+ for (i=0; i<255; i++) {
+   motor2->setSpeed(i);
+ } //Tank.setRightMotorPWM(255);
+
+      
+ Enes100.updateLocation();
+ Enes100.print("theta :");
+ Enes100.println(Enes100.location.theta);
+ delay(0.0001);
+}
+
+void turnRight(){
+motor1->run(FORWARD);
+ for (i=0; i<255; i++) {
+   motor1->setSpeed(i);
+ } // Tank.setLeftMotorPWM(255);
+ motor2->run(BACKWARD);
+ for (i=0; i<255; i++) {
+   motor2->setSpeed(i);
+ } //Tank.setRightMotorPWM(-255);
+
+      
+ Enes100.updateLocation();
+ Enes100.print("theta :");
+ Enes100.println(Enes100.location.theta);
+ delay(0.0001);
+}
+
+void goStraight(){
+motor1->run(RELEASE);
+motor2->run(RELEASE);//   Tank.turnOffMotors();
+motor1->run(FORWARD);
+for (i=0; i<255; i++) {
+  motor1->setSpeed(i);
+}//  Tank.setLeftMotorPWM(255);
+motor2->run(FORWARD);
+for (i=0; i<255; i++) {
+  motor1->setSpeed(i);
+}//Tank.setRightMotorPWM(255);
+Enes100.updateLocation();
+delay(0.0001);
+}
+
+
