@@ -28,7 +28,7 @@ double distanceLeft;
 void setup() {
   
  delay(3000);
- Enes100.begin("The Professionals", DATA, 9, 3, 2);
+ Enes100.begin("The Professionals", DATA, 21, 3, 2);
   Tank.begin();
   Serial.begin(9600);            
   AFMS.begin(1600); 
@@ -45,9 +45,13 @@ pinMode(rightPin1, OUTPUT); // Sets the trigPin as an Output
 
 void loop() {
 
-  partOne ();
+ partOne();
 
 }
+
+
+
+
 
 void turnLeft() {
 delay(1000);
@@ -117,7 +121,7 @@ void zeroDeg () {
 void toCenter () {
 
   while (1.4 < Enes100.location.y < 1.6) {
-    delay(1)
+    delay(1);
     while (! Enes100.updateLocation());
     delay(1);
 
@@ -144,6 +148,7 @@ void toCenter () {
       motor1->setSpeed(i);
     }
   }
+}
 
 void motorsOff () {
   motor1->run(RELEASE);
@@ -238,26 +243,29 @@ void initializeSensors () {
 void partOne() {
  delay(200);
  Enes100.updateLocation();
-  Enes100.print(Enes100.location.x);
+ Enes100.print(Enes100.location.x);
  if (Enes100.location.x < 1.31) {
     if (Enes100.location.y < 1.6) {
       while (Enes100.location.y < 1.6) {
         positive90 ();
-        Enes100.updateLocation();
+        while (! Enes100.updateLocation());
         delay(5);
+        Enes100.println("Y coordinate: ");
+        Enes100.print(Enes100.location.y);
         goStraight();
-      } 
+      }
     }
-
+ }
   
-    else if (Enes100.location.y > 1.6) {
+   else if (Enes100.location.y > 1.6) {
       while (fabs(Enes100.location.theta) > 0.05) {
-        Enes100.updateLocation();
+        while (! Enes100.updateLocation());
+        Enes100.print("X coordinate: ");
+        Enes100.println(Enes100.location.x);
         delay(500);
         turnLeft();
       }
     }
-  }
   
   else if (Enes100.location.x > 1.31) {
      motorsOff();
@@ -266,12 +274,41 @@ void partOne() {
 
 
 
+
 /*void partTwo () {
   if (Enes100.location.x < 2.7) {
     initializeSensors();
+    zeroDeg();
     goStraight();
 
-    
+    while(Enes100.location.x < 2.7) {
+      if (distanceLeft <= 15 || distanceRight <= 15) {
+        motorsOff();
+        delay(1)
+        while (! Enes100.updateLocation());
+        negative90();
+        delay(1);
+        while (! Enes100.updateLocation());
+        toCenter();
+        delay(1);
+        while (! Enes100.updateLocation());
+        zeroDeg();
+        delay(1);
+        while (! Enes100.updateLocation());
+        goStraight();
+        Enes100.println(
+      }
+      
+       else {
+        goStraight();
+        while (! Enes100.updateLocation());
+       }
+    }
+  }
+  
+  else {
+   motorsOff():
+  }
 }
 
 /*void partThree () {
