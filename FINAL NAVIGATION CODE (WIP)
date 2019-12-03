@@ -125,14 +125,30 @@ void positive90 () {
 
 
 void negative90 () {
-  while (-1.57 - Enes100.location.theta > 0.05) {
+  delay(1);
+  while (! Enes100.updateLocation());
+  delay(1);
+  
+  while (abs(-PI/2 - Enes100.location.theta) > .2) {
     turnLeft();
+    delay(100);
+    motorsOff();
+    while (! Enes100.updateLocation());
   }
 }
 
-/*void degrees0 () {
+void zeroDeg () {
+  delay(1);
+  while (! Enes100.updateLocation());
+  delay(1);
   
-}*/
+  while (abs(0 - Enes100.location.theta) > .2) {
+    turnLeft();
+    delay(100);
+    motorsOff();
+    while (! Enes100.updateLocation());
+  }
+}
 
 void motorsOff () {
   motor1->run(RELEASE);
