@@ -114,6 +114,37 @@ void zeroDeg () {
   }
 }
 
+void toCenter () {
+
+  while (1.4 < Enes100.location.y < 1.6) {
+    delay(1)
+    while (! Enes100.updateLocation());
+    delay(1);
+
+    delay(1000);
+  
+    motorsOff();
+    uint8_t i;
+    // Set the speed to start, from 0 (off) to 255 (max speed)
+    motor2->setSpeed(255);
+    motor2->run(FORWARD);
+    // turn on motor
+ 
+    motor2->run(FORWARD);
+    for (int i=0; i<255; i++) {
+      motor2->setSpeed(i);
+    }
+  
+    motor1->setSpeed(255);
+    motor1->run(FORWARD);
+    // turn on motor
+
+    motor1->run(FORWARD);
+    for (int i=0; i<255; i++) {
+      motor1->setSpeed(i);
+    }
+  }
+
 void motorsOff () {
   motor1->run(RELEASE);
   motor2->run(RELEASE);
