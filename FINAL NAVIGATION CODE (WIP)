@@ -13,8 +13,10 @@ const int leftPin1 = 6;
 const int leftPin2 = 5;
 long durationLeft;
 long durationRight;
-int distanceRight;
-int distanceLeft;
+
+
+double distanceRight;
+double distanceLeft;
 
 
 
@@ -25,6 +27,7 @@ int distanceLeft;
 
 void setup() {
   
+ delay(3000);
  Enes100.begin("The Professionals", DATA, 9, 3, 2);
   Tank.begin();
   Serial.begin(9600);            
@@ -107,8 +110,16 @@ delay(1000);
 
 
 void positive90 () {
- while (1.57 - Enes100.location.theta > 0.05) {
+  delay(1);
+  while (! Enes100.updateLocation());
+  delay(1);
+ 
+ while (abs(PI/2 - Enes100.location.theta) > .2) {
+  Enes100.print(abs(PI/4 - Enes100.location.theta));
     turnLeft();
+    delay(100);
+    motorsOff();
+    while (! Enes100.updateLocation());
   }
 }
 
@@ -214,27 +225,30 @@ void initializeSensors () {
 }
 
 void partOne() {
- delay(2000);
+ delay(200);
  Enes100.updateLocation();
- delay(2000);
- positive90 ();
-  
-  if (Enes100.location.x < 0.36) {
+  Enes100.print(Enes100.location.x);
+ if (Enes100.location.x < 1.31) {
     if (Enes100.location.y < 1.6) {
       while (Enes100.location.y < 1.6) {
+        positive90 ();
+        Enes100.updateLocation();
+        delay(5);
         goStraight();
       } 
     }
 
   
-    else if (Enes100.location.y > 1.6){
+    else if (Enes100.location.y > 1.6) {
       while (fabs(Enes100.location.theta) > 0.05) {
+        Enes100.updateLocation();
+        delay(500);
         turnLeft();
       }
     }
   }
   
-  else if (Enes100.location.x >= 0.36) {
+  else if (Enes100.location.x > 1.31) {
      motorsOff();
   }
 }
@@ -242,10 +256,14 @@ void partOne() {
 
 
 /*void partTwo () {
-  initializeSensors();
+  if (Enes100.location.x < 2.7) {
+    initializeSensors();
+    goStraight();
+
+    
 }
 
-void partThree () {
+/*void partThree () {
       Enes100.updateLocation();
     //when looping does not run if tank is already at destination
     if (Enes100.location.x < (Enes100.destination.x - 0.25)){
