@@ -85,7 +85,7 @@ void positive90 () {
  while (abs(PI/2 - Enes100.location.theta) > .2) {
   Enes100.print(abs(PI/4 - Enes100.location.theta));
     turnLeft();
-    delay(100);
+    delay(150);
     motorsOff();
     while (! Enes100.updateLocation());
   }
@@ -99,7 +99,7 @@ void negative90 () {
   
   while (abs(-PI/2 - Enes100.location.theta) > .2) {
     turnLeft();
-    delay(100);
+    delay(150);
     motorsOff();
     while (! Enes100.updateLocation());
   }
@@ -111,8 +111,8 @@ void zeroDeg () {
   delay(1);
   
   while (abs(0 - Enes100.location.theta) > .2) {
-    turnLeft();
-    delay(100);
+    turnRight();
+    delay(150);
     motorsOff();
     while (! Enes100.updateLocation());
   }
@@ -244,32 +244,42 @@ void partOne() {
  delay(200);
  Enes100.updateLocation();
  Enes100.print(Enes100.location.x);
- if (Enes100.location.x < 1.31) {
-    if (Enes100.location.y < 1.6) {
-      while (Enes100.location.y < 1.6) {
+ while (Enes100.location.x < 1.31) {
+    if (Enes100.location.y < 1.4) {
+      while (Enes100.location.y < 1.4) {
         positive90 ();
         while (! Enes100.updateLocation());
         delay(5);
-        Enes100.println("Y coordinate: ");
-        Enes100.print(Enes100.location.y);
+        Enes100.println("X coordinate: ");
+        Enes100.print(Enes100.location.x);
         goStraight();
       }
     }
+     while (! Enes100.updateLocation());
+     if (Enes100.location.y > 1.4) {
+      while (Enes100.location.y > 1.4){
+      delay(10);
+      zeroDeg();
+      goStraight();
+      while (! Enes100.updateLocation());
+      /*while (fabs(Enes100.location.theta) > 0.05) {
+        while (! Enes100.updateLocation());
+        Enes100.print("Y coordinate: ");
+        Enes100.println(Enes100.location.y);
+        delay(500);
+        turnRight();
+      }*/
+    }
+     }
+          while (! Enes100.updateLocation());
+
+  if (Enes100.location.x > 1.31) {
+     while (! Enes100.updateLocation());
+      motorsOff();
+    }
  }
   
-   else if (Enes100.location.y > 1.6) {
-      while (fabs(Enes100.location.theta) > 0.05) {
-        while (! Enes100.updateLocation());
-        Enes100.print("X coordinate: ");
-        Enes100.println(Enes100.location.x);
-        delay(500);
-        turnLeft();
-      }
-    }
-  
-  else if (Enes100.location.x > 1.31) {
-     motorsOff();
-  }
+ 
 }
 
 
