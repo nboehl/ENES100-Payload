@@ -1,0 +1,472 @@
+#include "Enes100.h"
+#include "Tank.h"
+#include "math.h"
+#include <Wire.h>
+#include <Adafruit_MotorShield.h>
+Adafruit_MotorShield AFMS = Adafruit_MotorShield(0x60); 
+Adafruit_DCMotor *motor1 = AFMS.getMotor(1);
+Adafruit_DCMotor *motor2 = AFMS.getMotor(2);
+Adafruit_DCMotor *motor3 = AFMS.getMotor(3);
+const int rightPin1 = 9;
+const int rightPin2 = 8;
+//LEFT SENSOR SETUP
+const int leftPin1 = 6;
+const int leftPin2 = 5;
+long durationLeft;
+long durationRight;
+
+
+double distanceRight;
+double distanceLeft;
+
+
+
+
+
+
+
+
+void setup() {
+  
+ delay(3000);
+ Enes100.begin("The Professionals", DATA, 14, 3, 2);
+  Tank.begin();
+  Serial.begin(9600);            
+  AFMS.begin(1600); 
+
+pinMode(rightPin1, OUTPUT); // Sets the trigPin as an Output
+  pinMode(rightPin2, INPUT); // Sets the echoPin as an Input
+  Serial.begin(9600); // Starts the serial communication
+
+  pinMode(leftPin1, OUTPUT); // Sets the trigPin as an Output
+  pinMode(leftPin2, INPUT); // Sets the echoPin as an Input
+  Serial.begin(9600); // Starts the serial communication
+
+}
+
+void loop() {
+  mission1();
+/*initializeSensors();  
+if(Enes100.location.x<1.3){
+ partOne();
+}*/
+/*else if(1<Enes100.location.x && Enes100.location.x<2.7){
+  initializeSensors();
+  partTwo();
+}*/
+}
+
+
+
+
+
+void turnLeft() {
+delay(500);
+  uint8_t i;
+  // Set the speed to start, from 0 (off) to 255 (max speed)
+  motor2->setSpeed(255);
+  motor2->run(FORWARD);
+  // turn on motor
+  
+  motor2->run(FORWARD);
+  for (int i=0; i<255; i++) {
+    motor2->setSpeed(i);
+  }
+  
+  motor1->setSpeed(255);
+  motor1->run(BACKWARD);
+  // turn on motor
+ 
+  motor1->run(BACKWARD);
+  for (int i=0; i<255; i++) {
+    motor1->setSpeed(i);
+  }
+}  
+
+
+void positive90 () {
+  delay(1);
+  while (! Enes100.updateLocation());
+  delay(1);
+ 
+ while (abs(PI/2 - Enes100.location.theta) > .2) {
+  Enes100.print(abs(PI/4 - Enes100.location.theta));
+    turnLeft();
+    delay(150);
+    motorsOff();
+    while (! Enes100.updateLocation());
+  }
+}
+
+
+void negative90 () {
+  delay(1);
+  while (! Enes100.updateLocation());
+  delay(1);
+  
+  while (abs(-PI/2 - Enes100.location.theta) > .2) {
+    turnLeft();
+    delay(150);
+    motorsOff();
+    while (! Enes100.updateLocation());
+  }
+}
+
+void zeroDeg () {
+  delay(1);
+  while (! Enes100.updateLocation());
+  delay(1);
+  
+  while (abs(0 - Enes100.location.theta) > .2) {
+    turnRight();
+    delay(150);
+    motorsOff();
+    while (! Enes100.updateLocation());
+  }
+}
+
+void toCenter () {
+
+  while (1.4 < Enes100.location.y < 1.6) {
+    delay(1);
+    while (! Enes100.updateLocation());
+    delay(1);
+
+    delay(1000);
+  
+    motorsOff();
+    uint8_t i;
+    // Set the speed to start, from 0 (off) to 255 (max speed)
+    motor2->setSpeed(255);
+    motor2->run(FORWARD);
+    // turn on motor
+ 
+    motor2->run(FORWARD);
+    for (int i=0; i<255; i++) {
+      motor2->setSpeed(i);
+    }
+  
+    motor1->setSpeed(255);
+    motor1->run(FORWARD);
+    // turn on motor
+
+    motor1->run(FORWARD);
+    for (int i=0; i<255; i++) {
+      motor1->setSpeed(i);
+    }
+  }
+}
+
+void motorsOff () {
+  motor1->run(RELEASE);
+  motor2->run(RELEASE);
+}
+
+
+
+
+void turnRight() {
+delay(1000);
+  uint8_t i;
+  // Set the speed to start, from 0 (off) to 255 (max speed)
+  motor2->setSpeed(255);
+  motor2->run(BACKWARD);
+  // turn on motor
+ 
+  motor2->run(BACKWARD);
+  for (int i=0; i<255; i++) {
+    motor2->setSpeed(i);
+  }
+  
+  motor1->setSpeed(255);
+  motor1->run(FORWARD);
+  // turn on motor
+  
+  motor1->run(FORWARD);
+  for (int i=0; i<255; i++) {
+    motor1->setSpeed(i);
+  }
+}
+
+
+void goStraight () {
+  delay(1000);
+  uint8_t i;
+  // Set the speed to start, from 0 (off) to 255 (max speed)
+  motor2->setSpeed(255);
+  motor2->run(FORWARD);
+  // turn on motor
+ 
+  motor2->run(FORWARD);
+  for (int i=0; i<255; i++) {
+    motor2->setSpeed(i);
+  }
+  
+  motor1->setSpeed(255);
+  motor1->run(FORWARD);
+  // turn on motor
+
+  motor1->run(FORWARD);
+  for (int i=0; i<255; i++) {
+    motor1->setSpeed(i);
+  }
+}
+
+
+void initializeSensors () {
+    uint8_t i;
+// put your main code here, to run repeatedly:
+// Clears the trigPin
+  digitalWrite(rightPin1, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(rightPin1, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(rightPin1, LOW);
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  durationLeft = pulseIn(rightPin2, HIGH);
+  // Calculating the distance
+  distanceLeft= durationLeft*0.034/2;
+  // Prints the distance on the Serial Monitor
+  Enes100.print("Distance RIGHT SENSOR: ");
+  Enes100.println(distanceLeft);
+
+  // Clears the trigPin
+  digitalWrite(leftPin1, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(leftPin1, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(leftPin1, LOW);
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  durationRight = pulseIn(leftPin2, HIGH);
+  // Calculating the distance
+  distanceRight= durationRight*0.034/2;
+  // Prints the distance on the Serial Monitor
+  Enes100.print("Distance LEFT SENSOR: ");
+  Enes100.println(distanceRight);
+}
+
+void partOne() {
+ delay(200);
+ while (! Enes100.updateLocation());
+ Enes100.println(Enes100.location.x);
+ while (Enes100.location.x < 0.7) {
+
+
+    if(Enes100.location.y < 1.3) {
+      while(Enes100.location.y < 1.3){
+        Enes100.println("Y coordinate: ");
+        Enes100.print(Enes100.location.y);
+      
+    if(Enes100.location.theta> (PI/2)-0.2 && Enes100.location.theta<(PI/2)+0.2){
+      goStraight();
+    }
+    else{
+      positive90();
+      goStraight();
+    }
+      } 
+    }
+      
+     while (! Enes100.updateLocation());
+     
+     if (Enes100.location.y >1.3) {
+      while (Enes100.location.y > 1.3){
+         Enes100.println("Y coordinate: ");
+        Enes100.print(Enes100.location.y);
+    if(Enes100.location.theta> -0.2 && Enes100.location.theta<0.2){
+      goStraight();
+    }
+    else{
+      delay(10);
+      zeroDeg();
+      goStraight();
+    }
+      }
+     }
+    
+      /*while (fabs(Enes100.location.theta) > 0.05) {
+        while (! Enes100.updateLocation());
+        Enes100.print("Y coordinate: ");
+        Enes100.println(Enes100.location.y);
+        delay(500);
+        turnRight();
+      }*/
+    }
+    
+  
+  while (Enes100.location.x > 0.7) {
+     while (! Enes100.updateLocation());
+      motorsOff();
+    }  
+ 
+}
+
+
+
+
+void partTwo () {
+  
+          while (! Enes100.updateLocation());
+  if (Enes100.location.x < 2.7) {
+    initializeSensors();
+    zeroDeg();
+    goStraight();
+
+        uint8_t i;
+// put your main code here, to run repeatedly:
+// Clears the trigPin
+  digitalWrite(rightPin1, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(rightPin1, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(rightPin1, LOW);
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  durationLeft = pulseIn(rightPin2, HIGH);
+  // Calculating the distance
+  distanceLeft= durationLeft*0.034/2;
+  // Prints the distance on the Serial Monitor
+  Enes100.print("Distance RIGHT SENSOR: ");
+  Enes100.println(distanceLeft);
+
+  // Clears the trigPin
+  digitalWrite(leftPin1, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(leftPin1, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(leftPin1, LOW);
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  durationRight = pulseIn(leftPin2, HIGH);
+  // Calculating the distance
+  distanceRight= durationRight*0.034/2;
+  // Prints the distance on the Serial Monitor
+  Enes100.print("Distance LEFT SENSOR: ");
+  Enes100.println(distanceRight);
+
+    while(Enes100.location.x < 2.7) {
+      initializeSensors();
+      if (distanceLeft <= 15 || distanceRight <= 15) {
+        motorsOff();
+        delay(1);
+        initializeSensors();
+        while (! Enes100.updateLocation());
+        negative90();
+        delay(1);
+        initializeSensors();
+        while (! Enes100.updateLocation());
+        toCenter();
+        delay(1);
+        initializeSensors();
+        while (! Enes100.updateLocation());
+        zeroDeg();
+        delay(1);
+        initializeSensors();
+        while (! Enes100.updateLocation());
+        goStraight();
+        Enes100.println(Enes100.location.x);
+      }
+      
+      
+       else {
+        goStraight();
+        while (! Enes100.updateLocation());
+       }
+    }
+  }
+  else {
+   motorsOff();
+  }
+}
+
+/*void partThree () {
+while (! Enes100.updateLocation());
+//when looping does not run if tank is already at destination
+    if (Enes100.location.x < (Enes100.destination.x - 0.25)){
+      float tankTheta = Enes100.location.theta;
+      double diffOfX = Enes100.destination.x - Enes100.location.x;
+      double diffOfY = Enes100.destination.y - Enes100.location.y;
+      float targetTheta = atanf(diffOfY/diffOfX); //find theta tank must face 
+      Enes100.println(targetTheta);
+      Tank.begin();
+    //tank rotates until it is extremely close to optimal angle, exact value hard to find
+      while (fabs(Enes100.location.theta - targetTheta) > 0.1) {
+        turnLeft();
+        Enes100.updateLocation();
+        Enes100.print("theta :");
+        Enes100.println(Enes100.location.theta);
+        delay(0.0001);
+      }//tank begins to move forward towards destination
+      motorsOff();
+      goStraight();
+      //stop 250mm before destination
+      if (Enes100.location.x < (Enes100.destination.x - 0.25)) {
+        motorsOff();
+      }
+  }
+}*/
+
+void mission1(){
+  delay(500);
+  uint8_t i;
+  // Set the speed to start, from 0 (off) to 255 (max speed)
+  motor3->setSpeed(100);
+  motor3->run(BACKWARD);
+  // turn on motor
+  
+  motor3->run(BACKWARD);
+  for (int i=0; i<100; i++) {
+    motor3->setSpeed(i);
+  }
+
+}
+
+void turnToConnect(){
+  
+}
+
+void readData(){
+  int inPin = 12;    // input wire is connected to digital pin 7
+int delayTime = 125; //delay time must be the same as transmitter(1/8 of a second)
+int val = 0;      // variable to store the value read by digitalRead
+char a[0]; //char array to convert message from binary to ASCII
+
+int lastvals[8];     //Store the contents of the last 8 values
+int message = 0;     //Store the binary value of the message
+}
+/*
+ * Look for the key (000000001). Once the key is found decode the next 7 bits, and store them in "message". Store the message 
+ * in a char array and then print out the message to the Serial Monitor
+ 
+void loop() {
+  val = digitalRead(inPin);    //Read the value from the input pin
+  //Print the value just read
+  //Serial.print("Reading Value ");
+  //Serial.println(val);
+  delay(delayTime);     //Wait for 1/8 of a second before reading next value
+  
+  //Check if the key was found (i.e. Last 8 values are 000000001)
+  if(lastvals[7] == 0 && lastvals[6] == 0 && lastvals[5] == 0 && lastvals[4] == 0 && lastvals[3] == 0 && lastvals[2] == 0 && lastvals[1] == 0 && lastvals[0] == 0 && val == 1){
+    //Serial.println("Key Recieved");
+    //Serial.print("Message is ");
+    for(int i=6;i>=0;i--){
+      //Read the next 7 bits and store them in a variable "message"
+      val = digitalRead(inPin);  
+      Serial.println(val);
+      delay(delayTime);
+      bitWrite(message,i,val);   //Stores the value "val" in the variable "message" at position "i"
+    }
+    a[0]= message;     //store the message in the char array
+    Serial.print("Data Recieved. Message is ");
+    Serial.println(a);     //print the ASCII value of the message
+  }
+  
+  //update the last 8 values that have been recieved
+  for(int j=6;j>=0;j--){
+    lastvals[j+1]=lastvals[j];
+  }
+  lastvals[0]=val;
+}
+}*/
